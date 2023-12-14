@@ -1,0 +1,39 @@
+version: "3.3"
+networks:
+    server-bridge:
+        driver: bridge
+
+services:
+    app:
+        image: "php-app:v1"
+        env_file:
+            - $PWD/.env
+        container_name: php-run
+        restart: always
+        ports:
+            - "9000:80"
+        
+        volumes:
+            # - $PWD/php-app:/var/www/html
+            - $PWD/.:/var/www/html/php-app
+        networks:
+            - server-bridge
+
+
+
+    mysql:
+        image: "mysql:8.0.29-debian"
+        container_name: "py-mysql"
+        ports:
+            - "${DB_PORT}:3306"
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+            MYSQL_DATABASE: "${DB_NAME}"
+            MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+        volumes:
+            - "$PWD/mysql/db:/var/lib/mysql:rw"
+            - "$PWD/mysql/log:/var/log/mysql:rw"
+            - "$PWD/emedishop.sql:/docker-entrypoint-initdb.d/emedishop.sql"
+        networks:
+            - server-bridge
