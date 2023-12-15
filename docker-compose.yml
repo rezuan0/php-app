@@ -15,7 +15,7 @@ services:
         
         volumes:
             # - $PWD/php-app:/var/www/html
-            - $PWD/.:/var/www/html/php-app
+            - $PWD/.:/var/www/html/
         networks:
             - server-bridge
 
